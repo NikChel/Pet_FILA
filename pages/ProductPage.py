@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 import random
 from base.base_page import BasePage
@@ -45,59 +46,61 @@ class ProductPage(BasePage):
     """Methods"""
 
     def check_name_price(self, name, price):
-        Logger.add_start_step(method="check_name_price")
-        self.assert_word(word=name, xpath=self.name_product, description_text="name")
-        try:
-            self.assert_word(word=price, xpath=self.price_product_standard,
-                             description_text="price standard", wait_time=5)
-        except TimeoutException:
-            self.assert_word(word=price, xpath=self.price_product_discount,
-                             description_text="price discount")
-        Logger.add_end_step(url=self.get_current_url(), method="check_name_price")
+        with allure.step("Check name price"):
+            Logger.add_start_step(method="check_name_price")
+            self.assert_word(word=name, xpath=self.name_product, description_text="name")
+            try:
+                self.assert_word(word=price, xpath=self.price_product_standard,
+                                 description_text="price standard", wait_time=5)
+            except TimeoutException:
+                self.assert_word(word=price, xpath=self.price_product_discount,
+                                 description_text="price discount")
+            Logger.add_end_step(url=self.get_current_url(), method="check_name_price")
 
     def check_product_window(self, name, quantity_product, size, price):
-        Logger.add_start_step(method="check_product_window")
-        self.assert_word(word=name, xpath=self.add_name_product, description_text="add name product")
-        self.assert_word(word=quantity_product, xpath=self.add_quantity_product, description_text="add quantity "
-                                                                                                  "product")
-        self.assert_word(word=size, xpath=self.add_size_product, description_text="add size product")
-        try:
-            self.assert_word(word=price, xpath=self.add_discount_price_product, description_text="add price product",
-                             wait_time=5)
-        except TimeoutException:
-            self.assert_word(word=price, xpath=self.add_standard_price_product, description_text="add price product")
-        self.click(xpath=self.close_window, description="close window")
-        Logger.add_end_step(url=self.get_current_url(), method="check_product_window")
+        with allure.step("Check product window"):
+            Logger.add_start_step(method="check_product_window")
+            self.assert_word(word=name, xpath=self.add_name_product, description_text="add name product")
+            self.assert_word(word=quantity_product, xpath=self.add_quantity_product, description_text="add quantity "
+                                                                                                      "product")
+            self.assert_word(word=size, xpath=self.add_size_product, description_text="add size product")
+            try:
+                self.assert_word(word=price, xpath=self.add_discount_price_product, description_text="add price product",
+                                 wait_time=5)
+            except TimeoutException:
+                self.assert_word(word=price, xpath=self.add_standard_price_product, description_text="add price product")
+            self.click(xpath=self.close_window, description="close window")
+            Logger.add_end_step(url=self.get_current_url(), method="check_product_window")
 
     def select_size(self):
-        Logger.add_start_step(method="select_size")
-        self.select_in_dom(xpath=self.size_button, description="size button")
-        lst_element = self.driver.find_elements(By.XPATH, self.size_button)
-        lst_num = []
-        count = 0
-        for n in lst_element:
-            count += 1
-            result = n.get_attribute("class")
-            if result == "" or result == "selected":
-                lst_num.append(count)
-            else:
-                pass
-
-        random_size_num = str(random.choice(lst_num))
-        random_size_xpath = self.size_button + "[" + random_size_num + "]"
-        self.click(xpath=random_size_xpath, description="size")
-        size_attribute_xpath = random_size_xpath + "/a"
-        size_attribute = self.get_attribute_value(xpath=size_attribute_xpath, attribute="title")
-        Logger.add_end_step(url=self.get_current_url(), method="select_size")
-        return size_attribute
+        with allure.step("Select size"):
+            self.select_in_dom(xpath=self.size_button, description="size button")
+            lst_element = self.driver.find_elements(By.XPATH, self.size_button)
+            lst_num = []
+            count = 0
+            for n in lst_element:
+                count += 1
+                result = n.get_attribute("class")
+                if result == "" or result == "selected":
+                    lst_num.append(count)
+                else:
+                    pass
+            random_size_num = str(random.choice(lst_num))
+            random_size_xpath = self.size_button + "[" + random_size_num + "]"
+            self.click(xpath=random_size_xpath, description="size")
+            size_attribute_xpath = random_size_xpath + "/a"
+            size_attribute = self.get_attribute_value(xpath=size_attribute_xpath, attribute="title")
+            Logger.add_end_step(url=self.get_current_url(), method="select_size")
+            return size_attribute
 
     def select_color(self):
-        Logger.add_start_step(method="select_color")
-        data_count_colors = self.count_mathing_elements(xpath=self.color_button, description="color")
-        count_colors = data_count_colors[0]
-        random_num = random.randint(a=1, b=int(count_colors))
-        random_color_xpath = self.color_button + "[" + str(random_num) + "]"
-        self.click(xpath=random_color_xpath, description="color")
-        color_attribute = self.get_attribute_value(xpath=random_color_xpath, attribute="title")
-        Logger.add_end_step(url=self.get_current_url(), method="select_color")
-        return color_attribute
+        with allure.step("Select color"):
+            Logger.add_start_step(method="select_color")
+            data_count_colors = self.count_mathing_elements(xpath=self.color_button, description="color")
+            count_colors = data_count_colors[0]
+            random_num = random.randint(a=1, b=int(count_colors))
+            random_color_xpath = self.color_button + "[" + str(random_num) + "]"
+            self.click(xpath=random_color_xpath, description="color")
+            color_attribute = self.get_attribute_value(xpath=random_color_xpath, attribute="title")
+            Logger.add_end_step(url=self.get_current_url(), method="select_color")
+            return color_attribute

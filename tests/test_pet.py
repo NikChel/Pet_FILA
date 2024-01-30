@@ -5,12 +5,15 @@ from pages.CheckoutPage import CheckoutPage
 from pages.MainPage import MainPage
 from pages.ProductPage import ProductPage
 from pages.ShoppingCartPage import ShoppingCartPage
+import allure
 
 
+@allure.description("Test smoke for standard user")
 def test_smoke_for_standard_user(login, clear_cart, clear_input_field, logout):
 
     """Data for test"""
-
+    #  python -m pytest --alluredir=test_result/ tests/test_pet.py # command for start test with allure
+    #  allure serve test_result/ # command for create allure report
     num_on_page_product_1 = "3"
     num_on_page_product_2 = "5"
     quantity_product_1 = "1"

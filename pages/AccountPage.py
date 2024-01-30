@@ -1,3 +1,4 @@
+import allure
 from base.base_page import BasePage
 from utilities.logger import Logger
 
@@ -29,23 +30,25 @@ class AccountPage(BasePage):
     """Methods"""
 
     def log_in(self, login_inp=login, password_inp=password):
-        Logger.add_start_step(method="log_in")
-        print("Begin log-in")
-        self.send_keys(keys=login_inp, xpath=self.email_field, description="email")
-        self.send_keys(keys=password_inp, xpath=self.password_field, description="password")
-        self.click(xpath=self.remember_button, description="remember")
-        self.click(xpath=self.login_button, description="login")
-        self.assert_word(word=self.check_login_word, xpath=self.check_field_login_word,
-                         description_text="check_word")
-        self.scroll_to_end(description="account")
-        print("Log-in success")
-        Logger.add_end_step(url=self.get_current_url(), method="log_in")
+        with allure.step("Login"):
+            Logger.add_start_step(method="log_in")
+            print("Begin log-in")
+            self.send_keys(keys=login_inp, xpath=self.email_field, description="email")
+            self.send_keys(keys=password_inp, xpath=self.password_field, description="password")
+            self.click(xpath=self.remember_button, description="remember")
+            self.click(xpath=self.login_button, description="login")
+            self.assert_word(word=self.check_login_word, xpath=self.check_field_login_word,
+                             description_text="check_word")
+            self.scroll_to_end(description="account")
+            print("Log-in success")
+            Logger.add_end_step(url=self.get_current_url(), method="log_in")
 
     def log_out(self):
-        Logger.add_start_step(method="log_out")
-        print("Begin log-out")
-        self.click(xpath=self.logout_button, description="log-out")
-        self.assert_word(word=self.check_logout_word, xpath=self.check_field_logout_word,
-                         description_text="check_word")
-        print("Log-out success")
-        Logger.add_end_step(url=self.get_current_url(), method="log_out")
+        with allure.step("Logout"):
+            Logger.add_start_step(method="log_out")
+            print("Begin log-out")
+            self.click(xpath=self.logout_button, description="log-out")
+            self.assert_word(word=self.check_logout_word, xpath=self.check_field_logout_word,
+                             description_text="check_word")
+            print("Log-out success")
+            Logger.add_end_step(url=self.get_current_url(), method="log_out")
