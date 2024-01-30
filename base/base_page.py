@@ -1,5 +1,6 @@
 from selenium.common import TimeoutException
 from base.base_class import BaseClass
+from utilities.logger import Logger
 
 
 class BasePage(BaseClass):
@@ -33,6 +34,7 @@ class BasePage(BaseClass):
     """Methods"""
 
     def get_promo(self, xpath=header_promo, description="some"):
+        Logger.add_start_step(method="get_promo")
         promo = None
         try:
             promo_text = self.get_text(xpath=xpath, description="product promo", wait_time=5)
@@ -45,9 +47,11 @@ class BasePage(BaseClass):
         except TimeoutException:
             promo = False
             promo_text = False
+        Logger.add_end_step(url=self.get_current_url(), method="get_promo")
         return promo, promo_text
 
     def check_mini_cart(self, name, quantity, price, size, num):
+        Logger.add_start_step(method="check_mini_cart")
         xpath_name = self.mini_cart_name_product + str(num) + self.end_field
         xpath_quantity_product = self.mini_cart_quantity + str(num) + self.end_field
         xpath_standard_price = (self.mini_cart_standard_price_first_part + str(num)
@@ -65,13 +69,16 @@ class BasePage(BaseClass):
         except TimeoutException:
             self.assert_word(word=price, xpath=xpath_standard_price,
                              description_text="mini cart price product", wait_time=5)
+        Logger.add_end_step(url=self.get_current_url(), method="check_mini_cart")
 
-    @staticmethod
-    def price_in_float(price):
+    def price_in_float(self, price):
+        Logger.add_start_step(method="price_in_float")
         price = float(price.partition("$")[2])
+        Logger.add_end_step(url=self.get_current_url(), method="price_in_float")
         return price
 
-    @staticmethod
-    def float_in_price(result):
+    def float_in_price(self, result):
+        Logger.add_start_step(method="float_in_price")
         result = "$" + str(format(result, '.2f'))
+        Logger.add_end_step(url=self.get_current_url(), method="float_in_price")
         return result

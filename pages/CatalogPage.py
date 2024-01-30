@@ -1,5 +1,6 @@
 import random
 from base.base_page import BasePage
+from utilities.logger import Logger
 
 
 class CatalogPage(BasePage):
@@ -34,6 +35,7 @@ class CatalogPage(BasePage):
     """Methods"""
 
     def quick_add(self, product_on_page_num=product_on_page_num):
+        Logger.add_start_step(method="quick_add")
         data_get_name_price = self.get_product_data(product_on_page_num=product_on_page_num)
         name = data_get_name_price[0]
         price = data_get_name_price[1]
@@ -62,9 +64,11 @@ class CatalogPage(BasePage):
         size_button = "(" + size_button + ")[" + str(random_num_size) + self.end_field
         size = self.get_attribute_value(xpath=size_button, attribute="title")
         self.click(xpath=size_button, description="size")
+        Logger.add_end_step(url=self.get_current_url(), method="quick_add")
         return name, price, color, size, product_button, promo, promo_text
 
     def get_product_data(self, product_on_page_num=product_on_page_num):
+        Logger.add_start_step(method="get_product_data")
         name_field = self.name_field + str(product_on_page_num) + self.end_field
         price_field = self.price_field + str(product_on_page_num) + self.end_field
         promo_field = self.promo_field + str(product_on_page_num) + self.end_field
@@ -80,4 +84,5 @@ class CatalogPage(BasePage):
             price = price.partition("$")[2]
             price = format(float(price) / 100 * (100 - float(promo)), '.2f')
             price = "$" + str(price)
+        Logger.add_end_step(url=self.get_current_url(), method="get_product_data")
         return name, price, product_button, promo, promo_text

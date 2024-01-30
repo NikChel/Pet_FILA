@@ -1,6 +1,8 @@
 from base.base_page import BasePage
 from selenium.common import TimeoutException
 
+from utilities.logger import Logger
+
 
 class ShoppingCartPage(BasePage):
     """Данные"""
@@ -36,6 +38,7 @@ class ShoppingCartPage(BasePage):
     """Methods"""
 
     def check_product(self, name, price, size, quantity, num, promo=False):
+        Logger.add_start_step(method="check_product")
         xpath_name = self.product_first + str(num) + self.name_product_second
         xpath_size = self.product_first + str(num) + self.size_product_second
         xpath_quantity = self.product_first + str(num) + self.quantity_product_second
@@ -53,17 +56,21 @@ class ShoppingCartPage(BasePage):
         subtotal = "$" + str(format(float(price.partition("$")[2]) * float(quantity), '.2f'))
         self.assert_word(word=subtotal, xpath=xpath_subtotal, description_text="subtotal")
         print("Success check product", num)
+        Logger.add_end_step(url=self.get_current_url(), method="check_product")
         return subtotal
 
     def check_limited(self):
+        Logger.add_start_step(method="check_limited")
         try:
             self.select_in_dom(xpath=self.error, description="error message", wait_time=5)
             error = True
         except TimeoutException:
             error = False
+        Logger.add_end_step(url=self.get_current_url(), method="check_limited")
         return error
 
     def limited_fix(self):
+        Logger.add_start_step(method="limited_fix")
         print("\nLimited error, start decrease")
         data_count = self.count_mathing_elements(xpath=self.quantity, description="quantity")
         count_object = data_count[0]
@@ -83,8 +90,10 @@ class ShoppingCartPage(BasePage):
             self.select_in_dom(xpath=self.error, description="error message", wait_time=5)
         except TimeoutException:
             print("Success, limit error fixed\n")
+        Logger.add_end_step(url=self.get_current_url(), method="limited_fix")
 
     def clear_cart(self):
+        Logger.add_start_step(method="clear_cart")
         print("Start clear cart")
         while True:
             try:
@@ -92,3 +101,4 @@ class ShoppingCartPage(BasePage):
             except TimeoutException:
                 break
         print("Success clear cart")
+        Logger.add_end_step(url=self.get_current_url(), method="clear_cart")
