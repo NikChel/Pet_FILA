@@ -1,9 +1,10 @@
 import datetime
 import os
+from base.base_class import project_path
 
 
 class Logger:
-    file_name = (f"C:\\Users\\globl\\PycharmProjects\\Pet_2\\logs\\log_" +
+    file_name = (f"{project_path}\\logs\\log_" +
                  str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log")
 
     @classmethod

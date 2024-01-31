@@ -7,13 +7,16 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Keys, ActionChains
 
+project_path = "C:\\Users\\globl\\PycharmProjects\\Pet_2"
+webdriver_path = "C:\\Users\\globl\\PycharmProjects\\resource\\chromedriver.exe"
+
 
 class BaseClass:
     """Настройки для webdriver"""
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)     # after finishing work, leave the browser open
     # options.add_argument('--headless')  # minimized window mode
-    g = Service("C:\\Users\\globl\\PycharmProjects\\resource\\chromedriver.exe")
+    g = Service(webdriver_path)
     driver = webdriver.Chrome(options=options, service=g)
     driver.maximize_window()
     action = ActionChains(driver)
@@ -111,9 +114,9 @@ class BaseClass:
         now_date = datetime.datetime.utcnow().strftime("%Y.%m.%d.%H.%M.%S")
         name_screenshot = "screenshot" + now_date + ".png"
         if assert_screen:
-            path = "C:\\Users\\globl\\PycharmProjects\\Pet_2\\screens\\assert\\"
+            path = project_path + "\\screens\\assert\\"
         else:
-            path = "C:\\Users\\globl\\PycharmProjects\\Pet_2\\screens\\success\\"
+            path = project_path + "\\screens\\success\\"
         self.driver.save_screenshot(path + name_screenshot)
         print("Screenshot", name_screenshot, "saved")
         return name_screenshot
